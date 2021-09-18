@@ -10,9 +10,17 @@ use Symfony\Component\Routing\Annotation\Route;
 class CommentController extends AbstractController
 {
     /**
+     * Api to handle the comment vote count
+     *
      * @Route("/comments/{id}/vote/{direction<up|down>}", methods="POST")
+     *
+     * @param int $id The comment id
+     * @param string $direction The type of vote up or down
+     * @param LoggerInterface $logger Service to log informations
+     *
+     * @return JsonResponse Return the number of votes
      */
-    public function commentVote($id, $direction, LoggerInterface $logger)
+    public function commentVote(int $id, string $direction, LoggerInterface $logger)
     {
         // todo use $id to query database
 

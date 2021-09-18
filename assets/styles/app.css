@@ -75,7 +75,7 @@ body {
     color: #3D9970;
 }
 .vote-down:hover {
-    color: #FF4136;
+    color: red;
 }
 
 .btn-question {
