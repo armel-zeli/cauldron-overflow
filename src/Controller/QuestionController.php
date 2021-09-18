@@ -49,6 +49,8 @@ class QuestionController extends AbstractController
             return $parser->transformMarkdown($questionText);
         });
 
+        dump($cache);
+
         return $this->render('question/show.html.twig', [
             'question' => ucwords(str_replace('-', ' ', $slug)),
             'answers' => $answers,
