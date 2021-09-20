@@ -8,10 +8,10 @@ use Symfony\Contracts\Cache\CacheInterface;
 
 class MarkdownHelper
 {
-    private $cache;
-    private $parser;
-    private $isDebug;
-    private $logger;
+    private CacheInterface $cache;
+    private MarkdownParserInterface $parser;
+    private bool $isDebug;
+    private LoggerInterface $logger;
 
     /**
      * Constructor class
@@ -43,7 +43,7 @@ class MarkdownHelper
      */
     public function parse(string $source): string
     {
-        if (strpos($source, 'cat') !== false) {
+        if (str_contains($source, 'cat') !== false) {
             $this->logger->info('Meaow !');
         }
         if ($this->isDebug) {

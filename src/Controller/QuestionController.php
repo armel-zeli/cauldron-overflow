@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Service\MarkdownHelper;
 use Psr\Log\LoggerInterface;
+use Sentry\State\HubInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -47,6 +48,7 @@ class QuestionController extends AbstractController
         if($this->isDebug){
             $this->logger->info('We are in debug mode !');
         }
+
         $answers = [
             'I think you are `wrong` !',
             'Absolutely, you are right !',
