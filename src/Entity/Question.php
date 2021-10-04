@@ -23,7 +23,7 @@ class Question
     private string $name;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=100, unique=true)
      */
     private string $slug;
 

@@ -34,12 +34,13 @@ class MarkdownExtension extends AbstractExtension
     }
 
     /**
-     * @param $value The value that should be parsed
+     * @param string $value The value that should be parsed
      *
      * @return string The value parsed in markdown format
      * @throws \Psr\Cache\InvalidArgumentException If the argument function are invalid
      */
-    public function parseMarkdown($value)
+
+    public function parseMarkdown(string $value) : string
     {
         return $this->markdownHelper->parse($value);
     }
