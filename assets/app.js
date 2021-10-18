@@ -14,7 +14,8 @@ import './bootstrap';
 let container = document.querySelectorAll('.js-vote-arrows')
 
 container.forEach(function (elementDiv) {
-    elementDiv.querySelectorAll('a').forEach(function (elementLink) {
+
+    elementDiv.querySelectorAll('button').forEach(function (elementLink) {
         elementLink.addEventListener('click', function (e) {
             e.preventDefault();
             fetch(

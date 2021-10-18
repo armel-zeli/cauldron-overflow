@@ -20,7 +20,7 @@ class CommentController extends AbstractController
      *
      * @return JsonResponse Return the number of votes
      */
-    public function commentVote(int $id, string $direction, LoggerInterface $logger)
+    public function commentVote(int $id, string $direction, LoggerInterface $logger) : JsonResponse
     {
         // todo use $id to query database
 

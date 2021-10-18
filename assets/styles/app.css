@@ -59,23 +59,41 @@ body {
     transform: rotate(20deg);
 }
 
-.vote-arrows {
+.vote-arrows, .vote-arrows .btn {
     font-size: 1.5rem;
+}
+
+.vote-arrows button {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+}
+
+.vote-arrows .btn {
+    color: #444;
+    padding: 0;
 }
 
 .vote-arrows span {
     font-size: 1rem;
 }
 
-.vote-arrows a {
-    color: #444;
-}
-
 .vote-up:hover {
     color: #3D9970;
 }
 .vote-down:hover {
-    color: red;
+    color: #FF4136;
+}
+
+.vote-arrows-alt .vote-up:hover {
+    color: #3D9970;
+}
+.vote-arrows-alt .vote-down:hover {
+    color: rgba(179, 20, 12, 0.63);
 }
 
 .btn-question {
