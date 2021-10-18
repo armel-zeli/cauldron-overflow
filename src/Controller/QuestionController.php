@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Question;
+use App\Repository\QuestionRepository;
 use App\Service\MarkdownHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -29,9 +30,14 @@ class QuestionController extends AbstractController
      *
      * @return Response Render the homepage's template
      */
-    public function homepage(): Response
+    public function homepage(QuestionRepository $repository): Response
     {
-        return $this->render('question/homepage.html.twig');
+        $questions = $repository->findAllAskedOrderByNewest();
+        dump($questions);
+        return $this->render(
+            'question/homepage.html.twig',
+            ['questions' => $questions]
+        );
     }
 
     /**
