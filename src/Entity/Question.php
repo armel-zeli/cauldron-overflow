@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\QuestionRepository;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -15,32 +16,33 @@ class Question
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private int $id;
+    private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private string $name;
+    private $name;
 
     /**
      * @ORM\Column(type="string", length=100, unique=true)
+     * @Gedmo\Slug(fields={"name"})
      */
-    private string $slug;
+    private $slug;
 
     /**
      * @ORM\Column(type="text")
      */
-    private string $question;
+    private $question;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private ?\DateTimeInterface $askedAt;
+    private $askedAt;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private int $votes = 0;
+    private $votes = 0;
 
     /**
      * @return int|null
@@ -147,6 +149,7 @@ class Question
 
         return sprintf('%s %d', $prefix, abs($this->getVotes()));
     }
+
     /**
      * @param int $votes
      *
