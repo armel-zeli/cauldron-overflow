@@ -31,12 +31,13 @@ class QuestionController extends AbstractController
      *
      * @Route("/", name="app_homepage")
      *
+     * @param QuestionRepository $repository
      * @return Response Render the homepage's template
      */
+
     public function homepage(QuestionRepository $repository): Response
     {
         $questions = $repository->findAllAskedOrderByNewest();
-        dump($questions);
 
         return $this->render(
             'question/homepage.html.twig',
@@ -84,9 +85,8 @@ class QuestionController extends AbstractController
      *
      * @param Question $question
      * @param Request $request
-     * @param EntityManager $em
-     *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @param EntityManagerInterface $em
+     * @return RedirectResponse
      */
     public function questionVote(
         Question $question,
