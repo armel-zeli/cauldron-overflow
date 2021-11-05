@@ -19,7 +19,7 @@ container.forEach(function (elementDiv) {
         elementLink.addEventListener('click', function (e) {
             e.preventDefault();
             fetch(
-                "/comments/10/vote/" + elementLink.dataset.direction, {method: 'POST'}
+                "/answers/" + elementLink.dataset.answer +"/vote/" + elementLink.dataset.direction, {method: 'POST'}
             ).then((response) => response.json())
                 .then((data) => {elementDiv.querySelector('.js-vote-total').textContent = data.votes})
                 .catch(error => console.log('Un problème est survenu ' + error.message))

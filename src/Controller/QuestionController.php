@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Question;
+use App\Repository\AnswerRepository;
 use App\Repository\QuestionRepository;
 use App\Service\MarkdownHelper;
 use Doctrine\ORM\EntityManager;
@@ -68,15 +69,8 @@ class QuestionController extends AbstractController
             $this->logger->info('We are in debug mode !');
         }
 
-        $answers = [
-            'I think you are `wrong` !',
-            'Absolutely, you are right !',
-            'IMO IDK !',
-        ];
-
         return $this->render('question/show.html.twig', [
             'question' => $question,
-            'answers' => $answers,
         ]);
     }
 
