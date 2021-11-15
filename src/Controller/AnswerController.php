@@ -7,6 +7,7 @@ use App\Repository\AnswerRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -41,12 +42,14 @@ class AnswerController extends AbstractController
      * @Route("/answers/popular", name="app_popular_answers")
      *
      * @param AnswerRepository $repository
+     * @param Request $request
      * @return Response
      * @throws \Doctrine\ORM\Query\QueryException
      */
-    public function popularAnswers(AnswerRepository $repository) : Response
+
+    public function popularAnswers(AnswerRepository $repository, Request $request) : Response
     {
-        $popularAnswers = $repository->findMostPopular();
+        $popularAnswers = $repository->findMostPopular($request->query->get('q'));
 
         return $this->render(
             'answers/popularAnswers.html.twig',
