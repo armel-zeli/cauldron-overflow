@@ -11,6 +11,10 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  */
 class Answer
 {
+    public const STATUS_NEED_APPROVAL = 'need_approval';
+    public const STATUS_NEED_SPAM = 'spam';
+    public const STATUS_NEED_APPROVED = 'approved';
+
     use TimestampableEntity;
     /**
      * @ORM\Id
@@ -39,6 +43,11 @@ class Answer
      * @ORM\JoinColumn(nullable=false)
      */
     private $question;
+
+    /**
+     * @ORM\Column(type="string", length=15)
+     */
+    private $status = self::STATUS_NEED_APPROVAL;
 
     public function getId(): ?int
     {
@@ -86,6 +95,15 @@ class Answer
         return $this->question;
     }
 
+    public function getQuestionText(): string
+    {
+        if(!$this->getQuestion()){
+            return '';
+        }
+
+        return (string) $this->getQuestion()->getQuestion();
+    }
+
     public function setQuestion(?Question $question): self
     {
         $this->question = $question;
@@ -105,5 +123,32 @@ class Answer
         $this->votes--;
 
         return $this;
+    }
+
+    public function getVotesString(): string
+    {
+        $prefix = $this->getVotes() >= 0 ? '+ ' : '- ';
+
+        return sprintf('%s %d', $prefix, abs($this->getVotes()));
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): self
+    {
+        if(!in_array($status,[self::STATUS_NEED_APPROVAL, self::STATUS_NEED_APPROVED, self::STATUS_NEED_SPAM])){
+            throw new \InvalidArgumentException(sprintf('Invalid status "%s"', $status));
+        }
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function isApproved(): bool
+    {
+        return $this->status === self::STATUS_NEED_APPROVED;
     }
 }

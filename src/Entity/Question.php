@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
+use App\Repository\AnswerRepository;
 use App\Repository\QuestionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -49,7 +51,8 @@ class Question
     private $votes = 0;
 
     /**
-     * @ORM\OneToMany(targetEntity=Answer::class, mappedBy="question")
+     * @ORM\OneToMany(targetEntity=Answer::class, mappedBy="question", fetch="EXTRA_LAZY")
+     * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private $answers;
 
@@ -204,6 +207,11 @@ class Question
         return $this->answers;
     }
 
+    public function getApprovedAnswers(): Collection
+    {
+       return $this->answers->matching(AnswerRepository::createApprovedCriteria());
+    }
+
     public function addAnswer(Answer $answer): self
     {
         if (!$this->answers->contains($answer)) {
@@ -225,4 +233,6 @@ class Question
 
         return $this;
     }
+
+
 }

@@ -3,10 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Answer;
+use App\Repository\AnswerRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class AnswerController extends AbstractController
@@ -18,9 +19,11 @@ class AnswerController extends AbstractController
      *
      * @param Answer $answer The answer
      * @param string $direction The type of vote up or down
+     * @param EntityManagerInterface $entityManager The entity manager interface
      *
      * @return JsonResponse Return the number of votes
      */
+
     public function answerVote(Answer $answer, string $direction, EntityManagerInterface $entityManager): JsonResponse
     {
         if ($direction === 'up') {
@@ -33,4 +36,23 @@ class AnswerController extends AbstractController
 
         return $this->json(['votes' => $answer->getVotes()]);
     }
+
+    /**
+     * @Route("/answers/popular", name="app_popular_answers")
+     *
+     * @param AnswerRepository $repository
+     * @return Response
+     * @throws \Doctrine\ORM\Query\QueryException
+     */
+    public function popularAnswers(AnswerRepository $repository) : Response
+    {
+        $popularAnswers = $repository->findMostPopular();
+
+        return $this->render(
+            'answers/popularAnswers.html.twig',
+            ['answers' => $popularAnswers]
+        );
+    }
+
+
 }

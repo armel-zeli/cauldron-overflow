@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Answer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,32 +20,22 @@ class AnswerRepository extends ServiceEntityRepository
         parent::__construct($registry, Answer::class);
     }
 
-    // /**
-    //  * @return Answer[] Returns an array of Answer objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public static function createApprovedCriteria(): Criteria
     {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
+        return Criteria::create()->andWhere(Criteria::expr()->eq('status', Answer::STATUS_NEED_APPROVED));
+    }
+
+    /**
+     * @return Answer[]
+     * @throws \Doctrine\ORM\Query\QueryException
+     */
+    public function findMostPopular(): array
+    {
+        return $this->createQueryBuilder('answer')
+            ->addCriteria(self::createApprovedCriteria())
+            ->orderBy('answer.votes', 'DESC')
             ->setMaxResults(10)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Answer
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
