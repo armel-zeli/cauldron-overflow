@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Tag;
 use App\Factory\AnswerFactory;
 use App\Factory\QuestionFactory;
+use App\Factory\TagFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -16,7 +17,13 @@ class AppFixtures extends Fixture
      */
     public function load(ObjectManager $manager)
     {
-        $questions = QuestionFactory::new()->createMany(10);
+        TagFactory::createMany(100);
+
+        $questions = QuestionFactory::new()->createMany(10, function() {
+          return [
+              'tags' => TagFactory::randomRange(0, 5)
+          ];
+        });
 
         QuestionFactory::new()->unpublished()->createMany(5);
 
@@ -32,18 +39,6 @@ class AppFixtures extends Fixture
             ];
         })->needApproval()->many(20)->create();
 
-        $question = QuestionFactory::createOne();
-
-        $tag1 = new Tag();
-        $tag1->setName('dinosaurs');
-        $tag2 = new Tag();
-        $tag2->setName('monster trucks');
-
-        $question->addTag($tag1);
-        $question->addTag($tag2);
-
-        $manager->persist($tag1);
-        $manager->persist($tag2);
 
         $manager->flush();
     }

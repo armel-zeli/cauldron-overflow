@@ -57,14 +57,14 @@ class Question
     private $answers;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="questions")
+     * @ORM\OneToMany(targetEntity=QuestionTag::class, mappedBy="question")
      */
-    private $tags;
+    private $questionTags;
 
     public function __construct()
     {
         $this->answers = new ArrayCollection();
-        $this->tags = new ArrayCollection();
+        $this->questionTags = new ArrayCollection();
     }
 
     /**
@@ -241,28 +241,32 @@ class Question
     }
 
     /**
-     * @return Collection|Tag[]
+     * @return Collection|QuestionTag[]
      */
-    public function getTags(): Collection
+    public function getQuestionTags(): Collection
     {
-        return $this->tags;
+        return $this->questionTags;
     }
 
-    public function addTag(Tag $tag): self
+    public function addQuestionTag(QuestionTag $questionTag): self
     {
-        if (!$this->tags->contains($tag)) {
-            $this->tags[] = $tag;
+        if (!$this->questionTags->contains($questionTag)) {
+            $this->questionTags[] = $questionTag;
+            $questionTag->setQuestion($this);
         }
 
         return $this;
     }
 
-    public function removeTag(Tag $tag): self
+    public function removeQuestionTag(QuestionTag $questionTag): self
     {
-        $this->tags->removeElement($tag);
+        if ($this->questionTags->removeElement($questionTag)) {
+            // set the owning side to null (unless already changed)
+            if ($questionTag->getQuestion() === $this) {
+                $questionTag->setQuestion(null);
+            }
+        }
 
         return $this;
     }
-
-
 }
