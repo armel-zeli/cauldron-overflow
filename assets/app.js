@@ -11,6 +11,9 @@ import './styles/app.css';
 // start the Stimulus application
 import './bootstrap';
 
+// activates collapse functionality
+import { Collapse } from 'bootstrap';
+
 let container = document.querySelectorAll('.js-vote-arrows')
 
 container.forEach(function (elementDiv) {

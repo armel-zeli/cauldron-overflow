@@ -3,13 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Question;
-use App\Repository\AnswerRepository;
 use App\Repository\QuestionRepository;
-use App\Service\MarkdownHelper;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
+use Pagerfanta\Pagerfanta;
 use Psr\Log\LoggerInterface;
-use Sentry\State\HubInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,19 +28,28 @@ class QuestionController extends AbstractController
     /**
      * Display the homepage
      *
-     * @Route("/", name="app_homepage")
+     * @Route("/{page<\d+>}", name="app_homepage")
      *
      * @param QuestionRepository $repository
+     * @param int $page
      * @return Response Render the homepage's template
      */
 
-    public function homepage(QuestionRepository $repository): Response
+    public function homepage(QuestionRepository $repository, int $page = 1): Response
     {
-        $questions = $repository->findAllAskedOrderByNewest();
+        $queryBuilder = $repository->createAskedOrderByNewestQueryBuilder();
+
+        $pagerFanta = new Pagerfanta(
+            new QueryAdapter($queryBuilder)
+        );
+
+        $pagerFanta->setMaxPerPage(5);
+
+        $pagerFanta->setCurrentPage($page);
 
         return $this->render(
             'question/homepage.html.twig',
-            ['questions' => $questions]
+            ['pager' => $pagerFanta]
         );
     }
 
