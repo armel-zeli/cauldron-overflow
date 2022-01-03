@@ -1,13 +1,13 @@
 <li class="mb-2">
-        {% if showQuestion|default(false) %}
-            <a href="{{ path('app_question_show',{
-                slug:answer.question.slug
-            }) }}"
-            class="mb-1 link-secondary"
-            ><strong>Question : </strong>
-                {{ answer.questionText|u.truncate(80,'...') }}
-            </a>
-        {% endif %}
+    {% if showQuestion|default(false) %}
+        <a href="{{ path('app_question_show',{
+            slug:answer.question.slug
+        }) }}"
+           class="mb-1 link-secondary"
+        ><strong>Question : </strong>
+            {{ answer.questionText|u.truncate(80,'...') }}
+        </a>
+    {% endif %}
     <div class="row mt-2">
         <div class="col-1">
             <img src="{{ asset('images/tisha.png') }}" width="50" height="50">
@@ -18,12 +18,15 @@
         </div>
         <div class="col-2 text-end">
             <small>{{ answer.createdAt|ago }}</small>
-            <div class="vote-arrows js-vote-arrows" style="min-width: 120px;">
-                <button class="vote-up" href="#" data-direction="up" data-answer={{ answer.id }}><i class="far fa-arrow-alt-circle-up"></i></button>
-                <button class="vote-down" href="#" data-direction="down" data-answer="{{ answer.id}}"><i class="far fa-arrow-alt-circle-down"></i></button>
-                <span><span class="js-vote-total">{{ answer.votesString }}</span></span>
-            </div>
+            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                <div class="vote-arrows js-vote-arrows" style="min-width: 120px;">
+                    <button class="vote-up" href="#" data-direction="up" data-answer={{ answer.id }}><i
+                                class="far fa-arrow-alt-circle-up"></i></button>
+                    <button class="vote-down" href="#" data-direction="down" data-answer="{{ answer.id }}"><i
+                                class="far fa-arrow-alt-circle-down"></i></button>
+                    <span><span class="js-vote-total">{{ answer.votesString }}</span></span>
+                </div>
+            {% endif %}
         </div>
-
     </div>
 </li>

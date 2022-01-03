@@ -5,13 +5,15 @@ namespace App\Controller;
 use App\Entity\Answer;
 use App\Repository\AnswerRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Psr\Log\LoggerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class AnswerController extends AbstractController
+
+class AnswerController extends BaseController
 {
     /**
      * Api to handle the answer vote count
@@ -21,12 +23,18 @@ class AnswerController extends AbstractController
      * @param Answer $answer The answer
      * @param string $direction The type of vote up or down
      * @param EntityManagerInterface $entityManager The entity manager interface
+     * @param LoggerInterface $logger The Logger interface
      *
      * @return JsonResponse Return the number of votes
+     * @IsGranted("IS_AUTHENTICATED_REMEMBERED")
      */
 
-    public function answerVote(Answer $answer, string $direction, EntityManagerInterface $entityManager): JsonResponse
+    public function answerVote(Answer $answer, string $direction, EntityManagerInterface $entityManager, LoggerInterface $logger): JsonResponse
     {
+        $logger->info('{user} is voting in {answer}!', [
+            'answer' => $answer->getId(),
+            'user'=> $this->getUser()->getEmail()
+        ]);
         if ($direction === 'up') {
             $answer->upVote();
         } else {
@@ -35,7 +43,7 @@ class AnswerController extends AbstractController
 
         $entityManager->flush();
 
-        return $this->json(['votes' => $answer->getVotes()]);
+        return $this->json(['votes' => $answer->getVotesString()]);
     }
 
     /**
