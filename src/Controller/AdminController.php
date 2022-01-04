@@ -65,4 +65,15 @@ class AdminController extends AbstractController
     {
         return new Response('Pretend admin page, that should be public');
     }
+
+    /**
+     * @Route("/admin/comments", name="admin_answers")
+     * @return Response
+     */
+    public function adminAnswers()
+    {
+        $this->denyAccessUnlessGranted('ROLE_ANSWER_ADMIN');
+
+        return new Response('Pretend answers admin page');
+    }
 }
