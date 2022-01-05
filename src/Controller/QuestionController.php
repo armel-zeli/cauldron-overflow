@@ -107,4 +107,19 @@ class QuestionController extends AbstractController
 
         return $this->redirectToRoute('app_question_show', ['slug' => $question->getSlug()]);
     }
+
+    /**
+     * @Route("/questions/edit/{slug}", name="app_question_edit")
+     *
+     * @param Question $question
+     * @return Response
+     */
+    public function edit(Question $question)
+    {
+        $this->denyAccessUnlessGranted('EDIT', $question);
+
+        return $this->render('question/edit.html.twig', [
+            'question' => $question,
+        ]);
+    }
 }
