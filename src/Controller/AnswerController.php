@@ -47,6 +47,8 @@ class AnswerController extends BaseController
     }
 
     /**
+     * Return the most popular questions
+     *
      * @Route("/answers/popular", name="app_popular_answers")
      *
      * @param AnswerRepository $repository
