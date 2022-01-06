@@ -35,17 +35,19 @@
                                 </div>
                             </div>
                             <div class="col">
-
-                                    <h1 class="q-title-show">{{ question.name }}</h1>
-                                    <a href="{{ path('app_question_edit',{
-                                        slug: question.slug
-                                    }) }}" class="btn btn-secondary btn-sm mb-2">Edit</a>
-                                    <div class="q-display p-3">
-                                        <i class="fa fa-quote-left mr-3"></i>
-                                        <p class="d-inline">{{ question.question|parse_markdown }}</p>
-                                        <p class="pt-4"><strong>--{{ question.owner.displayName }}</strong></p>
-                                    </div>
-
+                                <h1 class="q-title-show">{{ question.name }}</h1>
+                                {% if is_granted('EDIT', question) %}
+                                <a href="{{ path('app_question_edit',{
+                                    slug: question.slug
+                                }) }}" class="btn btn-secondary btn-sm mb-2">Edit</a>
+                                {% endif %}
+                                <div class="q-display p-3">
+                                    <i class="fa fa-quote-left mr-3"></i>
+                                    <p class="d-inline">{{ question.question|parse_markdown }}</p>
+                                    <p class="pt-4">
+                                        <strong>--{{ question.owner.displayName }} ({{ question.owner.email }})</strong>
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
